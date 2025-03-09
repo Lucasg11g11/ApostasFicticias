@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site de Apostas com Dinheiro Fictício</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Apostas Fictícias</div>
+    </header>
+
+    <div class="container">
+        <section class="intro">
+            <h1>Bem-vindo ao site de apostas com dinheiro fictício!</h1>
+            <p>Seja ousado e aposte suas moedas! Ganhe ou perca de acordo com a sorte.</p>
+        </section>
+
+        <section class="saldo">
+            <p>Saldo disponível: <span id="dinheiro">1000</span> moedas</p>
+        </section>
+
+        <section class="formulario-apostas">
+            <h2>Aposte nas opções abaixo:</h2>
+
+            <label for="quantidadeAposta">Quantidade de Moedas para Apostar:</label>
+            <input type="number" id="quantidadeAposta" min="1" max="1000" value="100">
+
+            <label for="tipoAposta">Escolha o tipo de aposta:</label>
+            <select id="tipoAposta" onchange="mostrarOpcoesAposta()">
+                <option value="">Selecione um tipo de aposta</option>
+                <option value="multiplicador">Multiplicador</option>
+                <option value="valorMaximo">Valor Máximo</option>
+            </select>
+
+            <div id="opcoesMultiplicador" style="display:none;">
+                <label for="multiplicador">Multiplicador (se escolher multiplicador):</label>
+                <input type="number" id="multiplicador" min="1" max="10" value="2">
+            </div>
+
+            <div id="opcoesValorMaximo" style="display:none;">
+                <label for="valorMaximo">Valor Máximo da Aposta:</label>
+                <input type="number" id="valorMaximo" min="1" max="10000" value="1000">
+            </div>
+
+            <div class="opcoes-aposta" style="display:none;">
+                <button class="btn aposta" onclick="apostar()">Apostar</button>
+                <button class="btn reset" onclick="resetar()">Resetar Saldo</button>
+            </div>
+        </section>
+
+        <section id="resultado">
+            <h2>Resultado da Aposta</h2>
+            <p id="mensagem">Clique em "Apostar" para começar!</p>
+        </section>
+
+        <section id="jogo" style="display:none;">
+            <h2>Você ficou sem moedas!</h2>
+            <p>Quer tentar recuperar algumas moedas jogando?</p>
+            <button class="btn" onclick="jogar()">Jogar</button>
+        </section>
+
+        <section id="resultadoJogo" style="display:none;">
+            <h2>Jogo da Sorte</h2>
+            <p>Escolha um número entre 1 e 20 para tentar ganhar moedas!</p>
+            <input type="number" id="numeroEscolhido" min="1" max="20">
+            <button class="btn" onclick="verificarJogo()">Verificar</button>
+            <p id="mensagemJogo"></p>
+        </section>
+    </div>
+
+    <footer>
+        <p>Site de Apostas Fictícias - Todos os direitos reservados © 2025</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
