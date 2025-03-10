@@ -19,18 +19,37 @@ function apostar() {
     let resultado = '';
 
     if (tipoAposta === 'multiplicadorAleatorio') {
-        const chanceDeGanhar = Math.random() < 0.3; // 30% de chance de ganhar
+        const chanceDeGanhar = Math.random() < 0.1; // 10% de chance de ganhar
 
         if (chanceDeGanhar) {
-            let multiplicador;
-            let sorteio = Math.random();
+            // Sorteio de número aleatório entre 0 e 1
+let sorteio = Math.random();
+let multiplicador = 0;
 
-            if (sorteio < 0.5) multiplicador = 2;  // 50% de chance de x2
-            else if (sorteio < 0.75) multiplicador = 3;  // 25% de chance de x3
-            else if (sorteio < 0.9) multiplicador = 5;  // 15% de chance de x5
-            else if (sorteio < 0.97) multiplicador = 10;  // 7% de chance de x10
-            else if (sorteio < 0.995) multiplicador = 50;  // 2.5% de chance de x50
-            else multiplicador = 100;  // 0.5% de chance de x100
+// Definindo probabilidades para cada multiplicador de 2 a 100
+if (sorteio < 0.3) multiplicador = 2;  // 30% de chance de x2
+else if (sorteio < 0.45) multiplicador = 3;  // 15% de chance de x3
+else if (sorteio < 0.55) multiplicador = 4;  // 10% de chance de x4
+else if (sorteio < 0.63) multiplicador = 5;  // 8% de chance de x5
+else if (sorteio < 0.69) multiplicador = 6;  // 6% de chance de x6
+else if (sorteio < 0.74) multiplicador = 7;  // 5% de chance de x7
+else if (sorteio < 0.78) multiplicador = 8;  // 4% de chance de x8
+else if (sorteio < 0.81) multiplicador = 9;  // 3% de chance de x9
+else if (sorteio < 0.84) multiplicador = 10; // 3% de chance de x10
+else if (sorteio < 0.87) multiplicador = 11; // 3% de chance de x11
+else if (sorteio < 0.89) multiplicador = 12; // 2% de chance de x12
+else if (sorteio < 0.91) multiplicador = 13; // 2% de chance de x13
+else if (sorteio < 0.93) multiplicador = 14; // 2% de chance de x14
+else if (sorteio < 0.95) multiplicador = 15; // 2% de chance de x15
+else if (sorteio < 0.96) multiplicador = 20; // 1% de chance de x20
+else if (sorteio < 0.97) multiplicador = 25; // 1% de chance de x25
+else if (sorteio < 0.98) multiplicador = 30; // 1% de chance de x30
+else if (sorteio < 0.985) multiplicador = 40; // 0.5% de chance de x40
+else if (sorteio < 0.99) multiplicador = 50; // 0.5% de chance de x50
+else if (sorteio < 0.995) multiplicador = 75; // 0.5% de chance de x75
+else multiplicador = 100;  // 0.5% de chance de x100
+
+console.log("Multiplicador sorteado: " + multiplicador);
 
             const ganho = quantidadeAposta * multiplicador;
             saldo += ganho;
