@@ -11,82 +11,97 @@
     <header>
         <div class="logo">Apostas Fictícias</div>
         <nav>
-            <button class="btn" onclick="mostrarApostas()">Apostas</button>
-            <button class="btn" onclick="mostrarConquistas()">Conquistas</button>
-            <button class="btn" onclick="mostrarMinijogo()">Minijogo de Risco</button>
-            <button class="btn" onclick="mostrarJogoDaSorte()">Jogo da Sorte</button>
+            <button class="btn" onclick="trocarAba('formularioApostas')">Apostas</button>
+            <button class="btn" onclick="trocarAba('conquistas')">Conquistas</button>
+            <button class="btn" onclick="trocarAba('minijogo')">Minijogo de Risco</button>
+            <button class="btn" onclick="trocarAba('jogo')">Jogo da Sorte</button>
+            <button class="btn" onclick="trocarAba('niveis')">Níveis</button>
         </nav>
     </header>
 
     <div class="container">
+        <!-- Seção de Introdução -->
         <section class="intro" id="intro">
             <h1>Bem-vindo ao site de apostas com dinheiro fictício!</h1>
             <p>Seja ousado e aposte suas moedas! Ganhe ou perca de acordo com a sorte.</p>
         </section>
 
+        <!-- Seção de Saldo -->
         <section class="saldo" id="saldoSection">
             <p>Saldo disponível: <span id="dinheiro">1000</span> moedas</p>
         </section>
 
-        <section class="formulario-apostas" id="formularioApostas">
+        <!-- Formulário de Apostas -->
+        <section class="formulario-apostas aba" id="formularioApostas" style="display:none;">
             <h2>Aposte nas opções abaixo:</h2>
-
             <label for="quantidadeAposta">Quantidade de Moedas para Apostar:</label>
             <input type="number" id="quantidadeAposta" min="1" max="1000" value="100">
-
-            <label for="tipoAposta">Escolha o tipo de aposta:</label>
             <select id="tipoAposta" onchange="mostrarOpcoesAposta()">
                 <option value="">Selecione um tipo de aposta</option>
-                <option value="multiplicador">Multiplicador</option>
+                <option value="multiplicadorAleatorio">Multiplicador Aleatório</option>
+                <option value="multiplicadorFixo">Multiplicador Fixo</option>
                 <option value="valorMaximo">Valor Máximo</option>
             </select>
+            <div id="opcoesMultiplicadorAleatorio" style="display:none;">
+                <p>Ao ganhar, um multiplicador aleatório será aplicado à sua aposta.</p>
+            </div>
 
-            <div id="opcoesMultiplicador" style="display:none;">
-                <label for="multiplicador">Multiplicador (se escolher multiplicador):</label>
-                <input type="number" id="multiplicador" min="1" max="10" value="2">
+            <div id="opcoesMultiplicadorFixo" style="display:none;">
+                <label for="multiplicadorFixo">Escolha o multiplicador fixo:</label>
+                <input type="number" id="multiplicadorFixo" min="1" max="10" value="2">
             </div>
 
             <div id="opcoesValorMaximo" style="display:none;">
-                <label for="valorMaximo">Valor Máximo da Aposta:</label>
-                <input type="number" id="valorMaximo" min="1" max="10000" value="1000">
+                <label for="valorMaximo">Escolha o valor máximo:</label>
+                <input type="number" id="valorMaximo" min="1" max="1000" value="100">
             </div>
 
-            <div class="opcoes-aposta" style="display:none;">
-                <button class="btn aposta" onclick="apostar()">Apostar</button>
-                <button class="btn reset" onclick="resetar()">Resetar Saldo</button>
-            </div>
+            <button class="btn" onclick="apostar()">Apostar</button>
+            <p id="resultadoAposta"></p>
         </section>
 
-        <section id="resultado">
-            <h2>Resultado da Aposta</h2>
+        <!-- Resultado da Aposta -->
+        <section id="resultado" style="display:none;">
+            <h2></h2>
             <p id="mensagem">Clique em "Apostar" para começar!</p>
         </section>
 
-        <section id="jogo">
+        <!-- Jogo da Sorte -->
+        <section id="jogo" class="aba" style="display:none;">
             <h2>Você ficou sem moedas!</h2>
             <p>Quer tentar recuperar algumas moedas jogando?</p>
-            <button class="btn" onclick="jogar()" id="btnJogarSorte">Jogar</button>
+            <button class="btn" onclick="iniciarJogoDaSorte()">Jogar</button>
         </section>
-        
 
-        <section id="resultadoJogo" style="display:none;">
+        <section id="resultadoJogo" class="aba" style="display:none;">
             <h2>Jogo da Sorte</h2>
             <p>Escolha um número entre 1 e 20 para tentar ganhar moedas!</p>
             <input type="number" id="numeroEscolhido" min="1" max="20">
-            <button class="btn" onclick="verificarJogo()">Verificar</button>
+            <button class="btn" onclick="jogarJogoDaSorte()">Verificar</button>
             <p id="mensagemJogo"></p>
+            <button class="btn" onclick="fecharJogoDaSorte()">Fechar</button>
         </section>
 
-        <section id="minijogo" style="display:none;">
+        <!-- Minijogo de Risco -->
+        <section id="minijogo" class="aba" style="display:none;">
             <h2>Minijogo de Risco</h2>
             <p>Arrisque-se para ganhar ou perder moedas!</p>
             <button class="btn" onclick="minijogoDeRisco()">Jogar Minijogo de Risco</button>
         </section>
 
-        <section id="conquistas" style="display:none;">
+        <!-- Conquistas -->
+        <section id="conquistas" class="aba" style="display:none;">
             <h2>Suas Conquistas</h2>
             <p>Verifique suas conquistas aqui!</p>
             <button class="btn" onclick="verificarConquistas()">Ver Conquistas</button>
+        </section>
+
+        <!-- Níveis -->
+        <section id="niveis" class="aba" style="display:none;">
+            <h2>Seu Nível</h2>
+            <p>Você está no nível: <span id="nivelUsuario">1</span></p>
+            <p>Recompensa: <span id="recompensaNivel">Nenhuma</span></p>
+            <button class="btn" onclick="mostrarProximosNiveis()">Ver Próximos Níveis</button>
         </section>
     </div>
 
