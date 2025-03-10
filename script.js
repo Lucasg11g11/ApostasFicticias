@@ -462,3 +462,25 @@ function carregarDados() {
         }
     };
 }
+
+// Função para resetar o saldo
+function resetarSaldo() {
+    // Reseta o saldo para 0
+    saldo = 0;
+    nivel = 1; // Opcional: Reseta o nível também, caso queira
+    atualizarNivel();  // Atualiza o nível e a recompensa com o novo saldo
+
+    // Exibe uma mensagem de confirmação
+    alert("Saldo resetado para 0!");
+
+    // Atualiza a interface com o novo saldo
+    document.getElementById("saldoUsuario").textContent = `Saldo: ${saldo} Moedas`;
+    document.getElementById("nivelUsuario").textContent = `Nível: ${nivel}`;
+    document.getElementById("recompensaNivel").textContent = recompensas[nivel - 1];
+
+    // Salva os dados após o reset
+    salvarDados();
+}
+
+// Adiciona um evento de clique no botão de resetar saldo
+document.getElementById("resetSaldoBtn").addEventListener("click", resetarSaldo);
