@@ -19,7 +19,7 @@ function apostar() {
     let resultado = '';
 
     if (tipoAposta === 'multiplicadorAleatorio') {
-        const chanceDeGanhar = Math.random() < 0.4; // 40% de chance de ganhar
+        const chanceDeGanhar = Math.random() < 0.3; // 30% de chance de ganhar
 
         if (chanceDeGanhar) {
             let multiplicador;
