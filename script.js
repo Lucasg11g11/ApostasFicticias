@@ -1,30 +1,48 @@
 // Inicializa o saldo e o tempo do último jogo
-let saldo = localStorage.getItem('saldo') ? parseInt(localStorage.getItem('saldo')) : 100;
-let ultimoJogo = localStorage.getItem('ultimoJogo') ? parseInt(localStorage.getItem('ultimoJogo')) : 0;
+let saldo = localStorage.getItem('saldo') ? parseInt(localStorage.getItem('saldo')) : 1000;
 let podeJogar = true;
 
-// Atualiza o saldo na tela
-function atualizarSaldo() {
-    document.getElementById("dinheiro").innerText = saldo;
-    localStorage.setItem('saldo', saldo);
-    verificarJogoDisponivel();
+// Função para atualizar o saldo
+// Função para inicializar a página e verificar o saldo
+function inicializar() {
+    atualizarSaldo();
+    verificarJogoDisponivel(); // Verifica se o saldo é 0 ou se o jogo da sorte deve ser exibido
 }
 
-// Verifica se o jogo da sorte deve aparecer
+// Função para atualizar o saldo
+function atualizarSaldo() {
+    document.getElementById("dinheiro").innerText = saldo; // Atualiza o saldo na tela
+    localStorage.setItem('saldo', saldo); // Atualiza o saldo no localStorage
+    verificarJogoDisponivel(); // Verifica se o jogo pode ser jogado
+}
+
+// Função para verificar se o jogo da sorte pode ser exibido
 function verificarJogoDisponivel() {
     const jogoElement = document.getElementById("jogo");
     const formularioElement = document.querySelector(".formulario-apostas");
 
     if (saldo <= 0) {
-        jogoElement.style.display = 'block';
+        jogoElement.style.display = 'block'; // Exibe o jogo da sorte automaticamente
         formularioElement.style.display = 'none';
         document.getElementById("mensagem").innerText = "Você ficou sem moedas!"; // Exibe mensagem de saldo insuficiente
     } else {
-        jogoElement.style.display = 'none';
-        formularioElement.style.display = 'block';
+        jogoElement.style.display = 'none'; // Esconde o jogo da sorte
+        formularioElement.style.display = 'block'; // Exibe o formulário de apostas
         document.getElementById("mensagem").innerText = ""; // Limpa a mensagem de saldo insuficiente
     }
 }
+
+// Função para o botão "Jogar Jogo da Sorte" (na parte superior)
+function jogarJogoDaSorte() {
+    mostrarJogoDaSorte(); // Chama a função que exibe o Jogo da Sorte
+}
+
+// Evento do botão "Jogar Jogo da Sorte"
+document.getElementById("btnJogarSorte").addEventListener("click", jogarJogoDaSorte);
+
+// Inicializa a página
+inicializar();
+
 
 // Exibe as opções de aposta conforme o tipo
 function mostrarOpcoesAposta() {
@@ -47,6 +65,14 @@ function mostrarOpcoesAposta() {
 // Faz a aposta
 function apostar() {
     const aposta = parseInt(document.getElementById("quantidadeAposta").value);
+    const tipoAposta = document.getElementById("tipoAposta").value;
+
+    // Verificações adicionais
+    if (!tipoAposta) {
+        alert("Por favor, selecione o tipo de aposta.");
+        return;
+    }
+
     if (aposta < 50) {
         alert("O valor mínimo de aposta é 50 moedas!");
         return;
@@ -59,7 +85,6 @@ function apostar() {
     saldo -= aposta;
     let premio = 0;
     let resultado = '';
-    const tipoAposta = document.getElementById("tipoAposta").value;
 
     if (tipoAposta === 'multiplicador') {
         const multiplicador = parseInt(document.getElementById("multiplicador").value);
@@ -86,65 +111,146 @@ function apostar() {
     }
 
     atualizarSaldo();
+    verificarConquistas(); // Verificar conquistas após a aposta
 }
 
 // Reseta o saldo
 function resetar() {
-    saldo = 100;
+    saldo = 1000;
     atualizarSaldo();
     document.getElementById("mensagem").innerText = "Saldo resetado. Aposte novamente!";
 }
 
-// Inicia o jogo da sorte
-function jogar() {
-    // Removido o cooldown de 5 minutos, agora o jogador pode jogar novamente imediatamente
-    document.querySelector(".formulario-apostas").style.display = 'none';
-    document.getElementById("jogo").style.display = 'block';
-    document.getElementById("resultadoJogo").style.display = 'block';
-    document.getElementById("mensagemJogo").innerText = "Escolha um número entre 1 e 20.";
-
-    // Salva o tempo atual como o último jogo (se necessário)
-    localStorage.setItem('ultimoJogo', Date.now());
-}
-
-// Verifica o resultado do jogo
-function verificarJogo() {
-    const numeroEscolhido = parseInt(document.getElementById("numeroEscolhido").value);
-    const numeroCorreto = Math.floor(Math.random() * 20) + 1;  // Agora o número correto é entre 1 e 20
-    let premio = 0;
-    let mensagem = '';
-
-    if (isNaN(numeroEscolhido) || numeroEscolhido < 1 || numeroEscolhido > 20) {
-        alert("Escolha um número entre 1 e 20.");
-        return;
-    }
-
-    // Ajusta a chance de ganhar com base no prêmio
-    const dificuldade = saldo < 100 ? 1 : (saldo < 500 ? 0.5 : (saldo < 1000 ? 0.3 : 0.1));
-
-    // A probabilidade de ganhar diminui com o prêmio
-    if (numeroEscolhido === numeroCorreto) {
-        premio = Math.floor(Math.random() * 401) + 100; // O prêmio agora pode ser até 500 moedas
-        saldo += premio;
-        mensagem = `Parabéns! Você ganhou ${premio} moedas.`;
-        document.getElementById("jogo").style.display = 'none';
+// Função para o minijogo de risco
+function minijogoDeRisco() {
+    const risco = Math.random();
+    if (risco < 0.2) {
+        saldo += 500;
+        alert("Você teve sorte! Ganhou 500 moedas.");
+    } else if (risco < 0.5) {
+        saldo += 100;
+        alert("Você ganhou 100 moedas!");
+    } else if (risco < 0.8) {
+        saldo -= 50;
+        alert("Você perdeu 50 moedas.");
     } else {
-        saldo = Math.max(saldo - 50, 0);
-        mensagem = `Que pena! Você errou e perdeu 50 moedas. O número correto era ${numeroCorreto}.`;
+        saldo -= 200;
+        alert("Que azar! Você perdeu 200 moedas.");
     }
-
     atualizarSaldo();
-    document.getElementById("mensagemJogo").innerText = mensagem;
+    verificarConquistas(); // Verificar conquistas após o risco
 }
 
-// Atualiza o saldo ao carregar
-atualizarSaldo();
+// Função para verificar conquistas
+function verificarConquistas() {
+    let mensagemConquista = "";
 
-// Ligar o evento de clique no botão de "Jogar"
-document.getElementById("botaoJogar").addEventListener("click", function() {
-    if (saldo <= 0) {
-        alert("Você não pode jogar sem moedas!");
-        return;
+    // Verificar se já foi desbloqueado
+    if (saldo >= 5000 && !localStorage.getItem("conquistaRico")) {
+        mensagemConquista += "Parabéns! Você alcançou 5000 moedas e desbloqueou a conquista 'Rico'.\n";
+        localStorage.setItem("conquistaRico", "desbloqueado");
     }
-    jogar();
-});
+
+    if (saldo >= 10000 && !localStorage.getItem("conquistaMilionario")) {
+        mensagemConquista += "Incrível! Você alcançou 10000 moedas e desbloqueou a conquista 'Milionário'.\n";
+        localStorage.setItem("conquistaMilionario", "desbloqueado");
+    }
+
+    if (saldo <= 0 && !localStorage.getItem("conquistaQuebraBanco")) {
+        mensagemConquista += "Você perdeu todas as suas moedas. Conquista 'Quebra-banco' desbloqueada!\n";
+        localStorage.setItem("conquistaQuebraBanco", "desbloqueado");
+    }
+
+    if (mensagemConquista !== "") {
+        alert(mensagemConquista); // Exibe as mensagens de conquista
+    }
+}
+
+// Função para resetar o saldo
+function resetarConquistas() {
+    saldo = 1000;
+    localStorage.removeItem("conquistaRico");
+    localStorage.removeItem("conquistaMilionario");
+    localStorage.removeItem("conquistaQuebraBanco");
+    alert("Seu progresso foi resetado. Tente novamente!");
+    atualizarSaldo();
+}
+
+// Função para mostrar as conquistas
+function mostrarConquistas() {
+    const conquistasContainer = document.getElementById("conquistas");
+    const conquistas = [];
+
+    if (localStorage.getItem("conquistaRico")) {
+        conquistas.push("Rico - Alcançou 5000 moedas.");
+    }
+    if (localStorage.getItem("conquistaMilionario")) {
+        conquistas.push("Milionário - Alcançou 10000 moedas.");
+    }
+    if (localStorage.getItem("conquistaQuebraBanco")) {
+        conquistas.push("Quebra-banco - Perdeu todas as moedas.");
+    }
+
+    if (conquistas.length > 0) {
+        conquistasContainer.innerHTML = `<h2>Suas Conquistas</h2><ul>${conquistas.map(c => `<li>${c}</li>`).join('')}</ul>`;
+    } else {
+        conquistasContainer.innerHTML = "<h2>Você ainda não desbloqueou nenhuma conquista.</h2>";
+    }
+
+    document.getElementById("intro").style.display = 'none';
+    document.getElementById("saldoSection").style.display = 'none';
+    document.getElementById("formularioApostas").style.display = 'none';
+    document.getElementById("minijogo").style.display = 'none';
+    document.getElementById("jogo").style.display = 'none';
+    conquistasContainer.style.display = 'block';
+}
+
+// Função para mostrar apostas
+function mostrarApostas() {
+    document.getElementById("intro").style.display = 'none';
+    document.getElementById("saldoSection").style.display = 'block';
+    document.getElementById("formularioApostas").style.display = 'block';
+    document.getElementById("conquistas").style.display = 'none';
+    document.getElementById("minijogo").style.display = 'none';
+    document.getElementById("jogo").style.display = 'none';
+}
+
+// Função para mostrar minijogo
+function mostrarMinijogo() {
+    document.getElementById("intro").style.display = 'none';
+    document.getElementById("saldoSection").style.display = 'none';
+    document.getElementById("formularioApostas").style.display = 'none';
+    document.getElementById("conquistas").style.display = 'none';
+    document.getElementById("minijogo").style.display = 'block';
+    document.getElementById("jogo").style.display = 'none';
+}
+
+// Função para mostrar jogo da sorte
+function mostrarJogoDaSorte() {
+    document.getElementById("intro").style.display = 'none';
+    document.getElementById("saldoSection").style.display = 'none';
+    document.getElementById("formularioApostas").style.display = 'none';
+    document.getElementById("conquistas").style.display = 'none';
+    document.getElementById("minijogo").style.display = 'none';
+    document.getElementById("jogo").style.display = 'block';
+}
+
+// Função para jogar o jogo da sorte
+function jogar() {
+    const numeroEscolhido = parseInt(document.getElementById("numeroEscolhido").value);
+    const numeroSorteado = Math.floor(Math.random() * 20) + 1;
+    let mensagem = "";
+
+    if (numeroEscolhido === numeroSorteado) {
+        saldo += 1000; // Ganho de 1000 moedas se acertar o número
+        mensagem = `Parabéns! Você acertou o número ${numeroSorteado} e ganhou 1000 moedas!`;
+    } else {
+        mensagem = `Que pena! O número sorteado foi ${numeroSorteado}. Tente novamente!`;
+    }
+
+    document.getElementById("mensagemJogo").innerText = mensagem;
+    atualizarSaldo();
+}
+
+// Inicializa o saldo na primeira carga da página
+atualizarSaldo();
