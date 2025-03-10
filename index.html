@@ -10,19 +10,25 @@
 <body>
     <header>
         <div class="logo">Apostas Fictícias</div>
+        <nav>
+            <button class="btn" onclick="mostrarApostas()">Apostas</button>
+            <button class="btn" onclick="mostrarConquistas()">Conquistas</button>
+            <button class="btn" onclick="mostrarMinijogo()">Minijogo de Risco</button>
+            <button class="btn" onclick="mostrarJogoDaSorte()">Jogo da Sorte</button>
+        </nav>
     </header>
 
     <div class="container">
-        <section class="intro">
+        <section class="intro" id="intro">
             <h1>Bem-vindo ao site de apostas com dinheiro fictício!</h1>
             <p>Seja ousado e aposte suas moedas! Ganhe ou perca de acordo com a sorte.</p>
         </section>
 
-        <section class="saldo">
+        <section class="saldo" id="saldoSection">
             <p>Saldo disponível: <span id="dinheiro">1000</span> moedas</p>
         </section>
 
-        <section class="formulario-apostas">
+        <section class="formulario-apostas" id="formularioApostas">
             <h2>Aposte nas opções abaixo:</h2>
 
             <label for="quantidadeAposta">Quantidade de Moedas para Apostar:</label>
@@ -56,11 +62,12 @@
             <p id="mensagem">Clique em "Apostar" para começar!</p>
         </section>
 
-        <section id="jogo" style="display:none;">
+        <section id="jogo">
             <h2>Você ficou sem moedas!</h2>
             <p>Quer tentar recuperar algumas moedas jogando?</p>
-            <button class="btn" onclick="jogar()">Jogar</button>
+            <button class="btn" onclick="jogar()" id="btnJogarSorte">Jogar</button>
         </section>
+        
 
         <section id="resultadoJogo" style="display:none;">
             <h2>Jogo da Sorte</h2>
@@ -68,6 +75,18 @@
             <input type="number" id="numeroEscolhido" min="1" max="20">
             <button class="btn" onclick="verificarJogo()">Verificar</button>
             <p id="mensagemJogo"></p>
+        </section>
+
+        <section id="minijogo" style="display:none;">
+            <h2>Minijogo de Risco</h2>
+            <p>Arrisque-se para ganhar ou perder moedas!</p>
+            <button class="btn" onclick="minijogoDeRisco()">Jogar Minijogo de Risco</button>
+        </section>
+
+        <section id="conquistas" style="display:none;">
+            <h2>Suas Conquistas</h2>
+            <p>Verifique suas conquistas aqui!</p>
+            <button class="btn" onclick="verificarConquistas()">Ver Conquistas</button>
         </section>
     </div>
 
